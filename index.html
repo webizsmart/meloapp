@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MelodiTON – 아티스트 플랫폼</title>
+  <meta name="description" content="텔레그램 기반 음악 NFT 플랫폼 - 음원 업로드, 저작권 검증, 소장형 NFT 발행, 팬 혜택 설정" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── SPLASH SCREEN ── -->
+    <div id="splash" class="screen active">
+      <div class="splash-bg"></div>
+      <div class="splash-content">
+        <div class="logo-wrap">
+          <div class="logo-icon">🎵</div>
+          <h1 class="logo-text">MelodiTON</h1>
+          <p class="logo-sub">Music · NFT · TON</p>
+        </div>
+        <div class="splash-progress">
+          <div class="splash-progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HOME ── -->
+    <div id="home" class="screen">
+      <header class="app-header">
+        <div class="header-left">
+          <div class="avatar" id="userAvatar">🎤</div>
+          <div>
+            <p class="header-greeting">안녕하세요 👋</p>
+            <p class="header-name" id="userName">아티스트</p>
+          </div>
+        </div>
+        <button class="btn-icon" onclick="navigateTo('notifications')">
+          <span class="notif-badge">3</span>
+          🔔
+        </button>
+      </header>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <span class="stat-icon">🎵</span>
+          <span class="stat-value" id="totalTracks">0</span>
+          <span class="stat-label">음원</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">💎</span>
+          <span class="stat-value" id="totalNFTs">0</span>
+          <span class="stat-label">NFT</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">👥</span>
+          <span class="stat-value" id="totalFans">0</span>
+          <span class="stat-label">팬</span>
+        </div>
+      </div>
+
+      <!-- Flow Steps -->
+      <div class="section-header">
+        <h2 class="section-title">아티스트라면 이렇게</h2>
+        <p class="section-sub">5단계로 나만의 음악 NFT를 만들어보세요</p>
+      </div>
+
+      <div class="flow-steps">
+        <div class="flow-card" onclick="navigateTo('upload')">
+          <div class="flow-num">01</div>
+          <div class="flow-icon upload-icon">🎵</div>
+          <div class="flow-info">
+            <h3>음원 업로드</h3>
+            <p>MP3/WAV 파일을 업로드하세요</p>
+          </div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-status pending" id="step1Status">대기</div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-dot"></div>
+        </div>
+
+        <div class="flow-card" onclick="navigateTo('copyright')">
+          <div class="flow-num">02</div>
+          <div class="flow-icon check-icon">✅</div>
+          <div class="flow-info">
+            <h3>저작권 자동 검증</h3>
+            <p>Audio Fingerprinting 기술</p>
+          </div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-status pending" id="step2Status">대기</div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-dot"></div>
+        </div>
+
+        <div class="flow-card" onclick="navigateTo('mint')">
+          <div class="flow-num">03</div>
+          <div class="flow-icon nft-icon">💎</div>
+          <div class="flow-info">
+            <h3>소장형 NFT 발행</h3>
+            <p>TON Blockchain에 영구 기록</p>
+          </div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-status pending" id="step3Status">대기</div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-dot"></div>
+        </div>
+
+        <div class="flow-card" onclick="navigateTo('benefits')">
+          <div class="flow-num">04</div>
+          <div class="flow-icon benefit-icon">🎟️</div>
+          <div class="flow-info">
+            <h3>팬 혜택 설정</h3>
+            <p>티켓·굿즈·채팅방 혜택 구성</p>
+          </div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-status pending" id="step4Status">대기</div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-dot"></div>
+        </div>
+
+        <div class="flow-card" onclick="navigateTo('channel')">
+          <div class="flow-num">05</div>
+          <div class="flow-icon share-icon">📢</div>
+          <div class="flow-info">
+            <h3>채널 공유 & 팬 소통</h3>
+            <p>팬들과 직접 연결하세요</p>
+          </div>
+          <div class="flow-arrow">›</div>
+          <div class="flow-status pending" id="step5Status">대기</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="quick-btn primary" onclick="navigateTo('upload')">
+          <span>🎵</span> 음원 업로드 시작
+        </button>
+        <button class="quick-btn secondary" onclick="navigateTo('myNFTs')">
+          <span>💎</span> 내 NFT 보기
+        </button>
+      </div>
+    </div>
+
+    <!-- ── UPLOAD SCREEN ── -->
+    <div id="upload" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('home')">←</button>
+        <h2>음원 업로드</h2>
+        <span class="step-badge">01</span>
+      </div>
+
+      <div class="screen-body">
+        <div class="upload-zone" id="uploadZone" onclick="triggerUpload()">
+          <div class="upload-icon-big">🎵</div>
+          <p class="upload-title">파일을 여기에 드래그하거나<br/>터치하여 선택하세요</p>
+          <p class="upload-hint">MP3 · WAV · FLAC 지원 · 최대 50MB</p>
+          <input type="file" id="fileInput" accept=".mp3,.wav,.flac" style="display:none" onchange="handleFileSelect(event)" />
+        </div>
+
+        <div id="filePreview" class="file-preview hidden">
+          <div class="file-info">
+            <div class="file-icon">🎵</div>
+            <div class="file-details">
+              <p class="file-name" id="fileName"></p>
+              <p class="file-size" id="fileSize"></p>
+            </div>
+            <button class="btn-remove" onclick="removeFile()">✕</button>
+          </div>
+          <div class="waveform-visual">
+            <div class="waveform-bars" id="waveformBars"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>곡 제목 <span class="required">*</span></label>
+          <input type="text" id="trackTitle" class="input-field" placeholder="예: 새벽 세 시에" />
+        </div>
+
+        <div class="form-group">
+          <label>아티스트 이름 <span class="required">*</span></label>
+          <input type="text" id="artistName" class="input-field" placeholder="예: 김민준" />
+        </div>
+
+        <div class="form-group">
+          <label>장르</label>
+          <div class="genre-chips">
+            <button class="chip" onclick="selectGenre(this, 'K-POP')">K-POP</button>
+            <button class="chip" onclick="selectGenre(this, 'R&B')">R&B</button>
+            <button class="chip" onclick="selectGenre(this, '발라드')">발라드</button>
+            <button class="chip" onclick="selectGenre(this, '힙합')">힙합</button>
+            <button class="chip" onclick="selectGenre(this, '재즈')">재즈</button>
+            <button class="chip" onclick="selectGenre(this, '인디')">인디</button>
+            <button class="chip" onclick="selectGenre(this, '클래식')">클래식</button>
+            <button class="chip" onclick="selectGenre(this, '기타')">기타</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>곡 설명</label>
+          <textarea id="trackDesc" class="input-field textarea" placeholder="이 곡에 대한 이야기를 들려주세요..."></textarea>
+        </div>
+
+        <div class="original-declaration">
+          <label class="checkbox-label">
+            <input type="checkbox" id="originalCheck" />
+            <span class="checkmark"></span>
+            <span>이 음원은 본인이 직접 창작한 오리지널 작품임을 확인합니다</span>
+          </label>
+        </div>
+
+        <button class="btn-primary full-width" onclick="proceedToVerify()">
+          저작권 검증 시작 →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── COPYRIGHT SCREEN ── -->
+    <div id="copyright" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('upload')">←</button>
+        <h2>저작권 자동 검증</h2>
+        <span class="step-badge">02</span>
+      </div>
+
+      <div class="screen-body">
+        <div class="copyright-hero">
+          <div class="copyright-icon-wrap">
+            <div class="copyright-ring"></div>
+            <div class="copyright-icon" id="copyrightIcon">🔍</div>
+          </div>
+          <h3 id="copyrightTitle">Audio Fingerprinting 분석 중</h3>
+          <p id="copyrightDesc">업로드된 음원을 전 세계 데이터베이스와 대조하고 있습니다</p>
+        </div>
+
+        <div class="analysis-steps" id="analysisSteps">
+          <div class="analysis-step" id="aStep1">
+            <div class="a-icon">⏳</div>
+            <div class="a-info">
+              <p class="a-title">오디오 핑거프린팅</p>
+              <p class="a-sub">음원 고유 패턴 추출</p>
+            </div>
+            <div class="a-status" id="aStatus1">분석중</div>
+          </div>
+          <div class="analysis-step" id="aStep2">
+            <div class="a-icon">⏳</div>
+            <div class="a-info">
+              <p class="a-title">저작권 DB 대조</p>
+              <p class="a-sub">전 세계 1억개 곡 비교</p>
+            </div>
+            <div class="a-status" id="aStatus2">대기</div>
+          </div>
+          <div class="analysis-step" id="aStep3">
+            <div class="a-icon">⏳</div>
+            <div class="a-info">
+              <p class="a-title">오리지널리티 확인</p>
+              <p class="a-sub">창작자 소유권 검증</p>
+            </div>
+            <div class="a-status" id="aStatus3">대기</div>
+          </div>
+        </div>
+
+        <div id="verifyResult" class="verify-result hidden">
+          <div class="result-card success">
+            <div class="result-icon">✅</div>
+            <h3>저작권 검증 완료</h3>
+            <p>오리지널 창작물로 확인되었습니다</p>
+            <div class="result-details">
+              <div class="result-row">
+                <span>유사곡 발견</span>
+                <span class="result-val green">0건</span>
+              </div>
+              <div class="result-row">
+                <span>오리지널리티 점수</span>
+                <span class="result-val green">98.7%</span>
+              </div>
+              <div class="result-row">
+                <span>검증 시간</span>
+                <span class="result-val">2.3초</span>
+              </div>
+            </div>
+            <div class="cert-badge">
+              <span>🛡️</span> 저작권 인증 완료
+            </div>
+          </div>
+          <button class="btn-primary full-width" onclick="proceedToMint()">
+            NFT 발행하기 →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MINT SCREEN ── -->
+    <div id="mint" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('copyright')">←</button>
+        <h2>소장형 NFT 발행</h2>
+        <span class="step-badge">03</span>
+      </div>
+
+      <div class="screen-body">
+        <div class="track-preview-card">
+          <div class="track-art">🎵</div>
+          <div class="track-meta">
+            <p class="track-name" id="mintTrackName">새벽 세 시에</p>
+            <p class="track-artist" id="mintArtistName">김민준</p>
+            <div class="verified-badge">✅ 저작권 인증됨</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>NFT 에디션 수량 <span class="required">*</span></label>
+          <p class="form-hint">소장형 1:N 컬렉터블로 발행됩니다</p>
+          <div class="quantity-selector">
+            <button class="qty-btn" onclick="changeQty(-10)">−10</button>
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-display" id="qtyDisplay">100</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+            <button class="qty-btn" onclick="changeQty(10)">+10</button>
+          </div>
+          <div class="qty-presets">
+            <button class="preset-chip" onclick="setQty(50)">50개</button>
+            <button class="preset-chip" onclick="setQty(100)">100개</button>
+            <button class="preset-chip" onclick="setQty(500)">500개</button>
+            <button class="preset-chip" onclick="setQty(1000)">1000개</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>NFT 이름</label>
+          <input type="text" id="nftName" class="input-field" placeholder="예: 새벽 세 시에 #001" />
+        </div>
+
+        <div class="form-group">
+          <label>NFT 설명</label>
+          <textarea id="nftDesc" class="input-field textarea" placeholder="소장자에게 전하는 메세지..."></textarea>
+        </div>
+
+        <div class="blockchain-info">
+          <div class="chain-row">
+            <span class="chain-label">블록체인</span>
+            <span class="chain-val"><span class="ton-dot"></span> TON Network</span>
+          </div>
+          <div class="chain-row">
+            <span class="chain-label">컨트랙트</span>
+            <span class="chain-val mono">EQD...xK3</span>
+          </div>
+          <div class="chain-row">
+            <span class="chain-label">발행 비용</span>
+            <span class="chain-val">~0.1 TON</span>
+          </div>
+          <div class="chain-row">
+            <span class="chain-label">타입</span>
+            <span class="chain-val">소장형 컬렉터블 NFT</span>
+          </div>
+        </div>
+
+        <div id="mintingProgress" class="minting-progress hidden">
+          <div class="mint-steps">
+            <div class="mint-step" id="mStep1">
+              <div class="ms-dot"></div>
+              <p>메타데이터 생성</p>
+            </div>
+            <div class="mint-step" id="mStep2">
+              <div class="ms-dot"></div>
+              <p>IPFS 업로드</p>
+            </div>
+            <div class="mint-step" id="mStep3">
+              <div class="ms-dot"></div>
+              <p>TON 트랜잭션</p>
+            </div>
+            <div class="mint-step" id="mStep4">
+              <div class="ms-dot"></div>
+              <p>컨펌 완료</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="mintResult" class="mint-result hidden">
+          <div class="result-card success">
+            <div class="result-icon">💎</div>
+            <h3>NFT 발행 완료!</h3>
+            <p id="mintResultDesc">100개의 소장형 NFT가 TON 블록체인에 영구 기록되었습니다</p>
+            <div class="tx-hash">
+              <span class="tx-label">TX Hash</span>
+              <span class="tx-val mono">0x4a2f...8b91</span>
+            </div>
+          </div>
+          <button class="btn-primary full-width" onclick="proceedToBenefits()">
+            팬 혜택 설정하기 →
+          </button>
+        </div>
+
+        <button class="btn-primary full-width" id="mintBtn" onclick="startMinting()">
+          💎 NFT 발행 시작
+        </button>
+      </div>
+    </div>
+
+    <!-- ── BENEFITS SCREEN ── -->
+    <div id="benefits" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('mint')">←</button>
+        <h2>팬 혜택 설정</h2>
+        <span class="step-badge">04</span>
+      </div>
+
+      <div class="screen-body">
+        <p class="screen-intro">소장 팬에게 제공할 혜택을 설정하세요.<br/>NFT 소장자는 자동으로 혜택을 받습니다.</p>
+
+        <div class="benefit-cards">
+          <div class="benefit-card" id="bc1">
+            <div class="bc-header">
+              <div class="bc-icon">🎫</div>
+              <div class="bc-info">
+                <h4>공연 티켓 할인</h4>
+                <p>소장자 전용 티켓 우선 구매 및 할인</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="bt1" onchange="toggleBenefit(1)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="bc-config hidden" id="bcConfig1">
+              <div class="form-group">
+                <label>할인율</label>
+                <div class="slider-container">
+                  <input type="range" id="discountRate" min="5" max="100" value="30" oninput="updateSlider('discountRate', 'discountVal', '%')" />
+                  <span id="discountVal">30%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="benefit-card" id="bc2">
+            <div class="bc-header">
+              <div class="bc-icon">👕</div>
+              <div class="bc-info">
+                <h4>굿즈 할인</h4>
+                <p>MD 상품 소장자 전용 특별 가격</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="bt2" onchange="toggleBenefit(2)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="bc-config hidden" id="bcConfig2">
+              <div class="form-group">
+                <label>할인율</label>
+                <div class="slider-container">
+                  <input type="range" id="goodsRate" min="5" max="50" value="20" oninput="updateSlider('goodsRate', 'goodsVal', '%')" />
+                  <span id="goodsVal">20%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="benefit-card" id="bc3">
+            <div class="bc-header">
+              <div class="bc-icon">💬</div>
+              <div class="bc-info">
+                <h4>팬미팅 초대</h4>
+                <p>소장자 전용 비공개 팬미팅 초대</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="bt3" onchange="toggleBenefit(3)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="bc-config hidden" id="bcConfig3">
+              <div class="form-group">
+                <label>팬미팅 날짜</label>
+                <input type="date" id="fanmeetDate" class="input-field" />
+              </div>
+            </div>
+          </div>
+
+          <div class="benefit-card" id="bc4">
+            <div class="bc-header">
+              <div class="bc-icon">🔒</div>
+              <div class="bc-info">
+                <h4>소장자 전용 채팅방</h4>
+                <p>아티스트와 직접 소통하는 프라이빗 채팅</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="bt4" onchange="toggleBenefit(4)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="bc-config hidden" id="bcConfig4">
+              <div class="form-group">
+                <label>채팅방 이름</label>
+                <input type="text" id="chatRoomName" class="input-field" placeholder="예: 새벽세시팬 채팅방" />
+              </div>
+            </div>
+          </div>
+
+          <div class="benefit-card" id="bc5">
+            <div class="bc-header">
+              <div class="bc-icon">🎵</div>
+              <div class="bc-info">
+                <h4>미공개 음원 선공개</h4>
+                <p>신곡 또는 미공개 트랙 우선 제공</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="bt5" onchange="toggleBenefit(5)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary full-width" onclick="saveBenefits()">
+          혜택 저장 & 채널 설정 →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── CHANNEL SCREEN ── -->
+    <div id="channel" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('benefits')">←</button>
+        <h2>채널 공유 & 팬 소통</h2>
+        <span class="step-badge">05</span>
+      </div>
+
+      <div class="screen-body">
+        <div class="music-card-preview">
+          <div class="mc-art">
+            <div class="mc-art-inner">🎵</div>
+          </div>
+          <div class="mc-info">
+            <h3 id="mcTrackName">새벽 세 시에</h3>
+            <p id="mcArtistName">김민준</p>
+            <div class="mc-badges">
+              <span class="mc-badge nft">💎 NFT</span>
+              <span class="mc-badge cert">✅ 인증</span>
+            </div>
+          </div>
+          <div class="mc-player">
+            <button class="mc-play" id="mcPlayBtn" onclick="togglePlay()">▶</button>
+            <div class="mc-waveform">
+              <div id="mcBars" class="mc-bars"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="share-section">
+          <h3>공유 방법 선택</h3>
+          <div class="share-options">
+            <button class="share-opt" onclick="shareToChannel()">
+              <span class="so-icon">📢</span>
+              <span>내 채널에 공유</span>
+              <span class="so-arrow">›</span>
+            </button>
+            <button class="share-opt" onclick="shareToFriends()">
+              <span class="so-icon">👥</span>
+              <span>친구에게 전달</span>
+              <span class="so-arrow">›</span>
+            </button>
+            <button class="share-opt" onclick="copyShareLink()">
+              <span class="so-icon">🔗</span>
+              <span>링크 복사</span>
+              <span class="so-arrow">›</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="fans-section">
+          <div class="fans-header">
+            <h3>소장자 팬 목록</h3>
+            <span class="fans-count" id="fansCount">0명</span>
+          </div>
+
+          <div class="fans-empty" id="fansEmpty">
+            <div class="fans-empty-icon">👥</div>
+            <p>아직 소장자가 없습니다</p>
+            <p class="fans-empty-sub">음악 링크를 공유하면 팬들이 소장할 수 있어요</p>
+          </div>
+
+          <div class="fans-list hidden" id="fansList">
+            <!-- dynamic fans -->
+          </div>
+        </div>
+
+        <div class="fan-message-box">
+          <h3>팬에게 메시지 보내기</h3>
+          <textarea id="fanMessage" class="input-field textarea" placeholder="소장자 팬들에게 전하고 싶은 메시지..."></textarea>
+          <button class="btn-primary full-width" onclick="sendFanMessage()">
+            📨 메시지 전송
+          </button>
+        </div>
+
+        <button class="btn-secondary full-width" onclick="finishAll()">
+          🎉 완료 – 홈으로 돌아가기
+        </button>
+      </div>
+    </div>
+
+    <!-- ── MY NFTs SCREEN ── -->
+    <div id="myNFTs" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('home')">←</button>
+        <h2>내 NFT 컬렉션</h2>
+        <span></span>
+      </div>
+
+      <div class="screen-body">
+        <div class="nft-empty" id="nftEmpty">
+          <div class="nft-empty-icon">💎</div>
+          <p>아직 발행한 NFT가 없습니다</p>
+          <button class="btn-primary" onclick="navigateTo('upload')">첫 NFT 발행하기</button>
+        </div>
+        <div class="nft-grid" id="nftGrid"></div>
+      </div>
+    </div>
+
+    <!-- ── NOTIFICATIONS SCREEN ── -->
+    <div id="notifications" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="navigateTo('home')">←</button>
+        <h2>알림</h2>
+        <span></span>
+      </div>
+      <div class="screen-body">
+        <div class="notif-list">
+          <div class="notif-item unread">
+            <div class="notif-icon">💎</div>
+            <div class="notif-info">
+              <p class="notif-title">새 소장자 알림</p>
+              <p class="notif-body">fan_user123님이 당신의 NFT를 소장했습니다</p>
+              <p class="notif-time">방금 전</p>
+            </div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-icon">💬</div>
+            <div class="notif-info">
+              <p class="notif-title">팬 메시지</p>
+              <p class="notif-body">melody_fan님이 소장자 채팅방에 메시지를 남겼습니다</p>
+              <p class="notif-time">5분 전</p>
+            </div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-icon">🎫</div>
+            <div class="notif-info">
+              <p class="notif-title">혜택 자동 지급</p>
+              <p class="notif-body">공연 티켓 쿠폰이 3명의 소장자에게 발송되었습니다</p>
+              <p class="notif-time">1시간 전</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TOAST MESSAGE ── -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- ── BOTTOM NAV ── -->
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="nav-item active" onclick="navigateTo('home')" id="nav-home">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">홈</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('upload')" id="nav-upload">
+        <span class="nav-icon">🎵</span>
+        <span class="nav-label">업로드</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('myNFTs')" id="nav-myNFTs">
+        <span class="nav-icon">💎</span>
+        <span class="nav-label">내 NFT</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('notifications')" id="nav-notifications">
+        <span class="nav-icon">🔔</span>
+        <span class="nav-label">알림</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
